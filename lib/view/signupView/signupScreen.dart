@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:task_1/provider/loginProvider.dart';
-import 'package:task_1/provider/signupProvider.dart';
-import 'package:task_1/screens/homeScreen.dart';
-import 'package:task_1/screens/loginScreen.dart';
+import 'package:task_1/view_model/controller/signup/signupProvider.dart';
+import 'package:task_1/res/appStrings/appStrings.dart';
+import 'package:task_1/view/homeView/homeScreen.dart';
+import 'package:task_1/view/loginView/loginScreen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -18,7 +19,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
-    final signupProvider = Provider.of<SignupProvider>(context, listen: false);
+    final signupProvider = Provider.of<SignupProvider>(context);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -28,7 +29,7 @@ class _SignupScreenState extends State<SignupScreen> {
             return ListView(
               children: [
                 const Text(
-                  "SignUp",
+                  Appstrings.signupText,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 50,
@@ -46,13 +47,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: signupProvider.firstNameController,
                           validator: (value) {
                             if (value!.isEmpty || value.length < 3) {
-                              return "Please enter at least 3 characters";
+                              return Appstrings.nameErrorText;
                             } else {
                               return null;
                             }
                           },
                           decoration:
-                              textFieldDecoration("Enter your First Name"),
+                              textFieldDecoration(Appstrings.firstNameHintText),
                         ),
                         SizedBox(
                           height: height * 0.05,
@@ -61,13 +62,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: signupProvider.lastNameController,
                           validator: (value) {
                             if (value!.isEmpty || value.length < 3) {
-                              return "Please enter at least 3 characters";
+                              return Appstrings.nameErrorText;
                             } else {
                               return null;
                             }
                           },
                           decoration:
-                              textFieldDecoration("Enter your Last Name"),
+                              textFieldDecoration(Appstrings.lastNameHintText),
                         ),
                         SizedBox(
                           height: height * 0.05,
@@ -79,10 +80,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                 value.endsWith(".com")) {
                               return null;
                             } else {
-                              return "Please enter a valid emial";
+                              return Appstrings.emailErrorText;
                             }
                           },
-                          decoration: textFieldDecoration("Enter your email"),
+                          decoration:
+                              textFieldDecoration(Appstrings.hintEmailText),
                         ),
                         SizedBox(
                           height: height * 0.05,
@@ -91,59 +93,59 @@ class _SignupScreenState extends State<SignupScreen> {
                           obscureText: true,
                           controller: signupProvider.passwordController,
                           validator: (value) {
-                            if (value!.length < 8 || value!.isEmpty) {
-                              return "Password at least should be 8 characters";
+                            if (value!.length < 8 || value.isEmpty) {
+                              return Appstrings.passwordErrorText;
                             } else {
                               return null;
                             }
                           },
                           decoration:
-                              textFieldDecoration("Enter your password"),
+                              textFieldDecoration(Appstrings.hintPasswordText),
                         )
                       ],
                     )),
                 SizedBox(
                   height: height * 0.1,
                 ),
-                Consumer<SignupProvider>(
-                  builder: (context, value, child) {
-                    return ElevatedButton(
+                signupProvider.isLoading
+                    ? ElevatedButton(
                         style: const ButtonStyle(
                             backgroundColor:
                                 WidgetStatePropertyAll(Colors.blue)),
-                        onPressed: signupProvider.isLoading
-                            ? null
-                            : () {
-                                if (_formKey.currentState!.validate()) {
-                                  signupProvider.signupUser(
-                                      signupProvider.firstNameController.text,
-                                      signupProvider.lastNameController.text,
-                                      signupProvider.emailController.text,
-                                      signupProvider.passwordController.text,
-                                      context);
-                                }
-                              },
-                        child: signupProvider.isLoading
-                            ? const Center(
-                                child: SizedBox(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                              )
-                            : const Text(
-                                "Signup",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700),
-                              ));
-                  },
-                ),
+                        onPressed: null,
+                        child: Center(
+                          child: Container(
+                            child: const CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ))
+                    : ElevatedButton(
+                        style: const ButtonStyle(
+                            backgroundColor:
+                                WidgetStatePropertyAll(Colors.blue)),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            signupProvider.signupUser(
+                              signupProvider.firstNameController.text,
+                              signupProvider.lastNameController.text,
+                              signupProvider.emailController.text,
+                              signupProvider.passwordController.text,
+                              context,
+                            );
+                          }
+                        },
+                        child: const Text(
+                          Appstrings.signupText,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700),
+                        )),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Already have an account?"),
+                    const Text(Appstrings.accountLoginHintText),
                     GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -153,7 +155,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               ));
                         },
                         child: const Text(
-                          "Login",
+                          Appstrings.loginText,
                           style: TextStyle(
                               fontStyle: FontStyle.italic, color: Colors.blue),
                         ))

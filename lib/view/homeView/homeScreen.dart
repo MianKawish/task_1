@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-import 'package:task_1/provider/homeProvider.dart';
+import 'package:task_1/view_model/controller/home/homeProvider.dart';
+import 'package:task_1/res/appStrings/appStrings.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _formKey = GlobalKey<FormState>();
+
   updateValues(String firstName, String lastName, String email) {
     final provide = Provider.of<HomeProvider>(context, listen: false);
     provide.setLoading(false);
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          "Home",
+          Appstrings.homeText,
           style: TextStyle(
               color: Colors.blue, fontSize: 22, fontWeight: FontWeight.bold),
         ),
@@ -70,13 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           controller: homeProvider.firstNameController,
                           validator: (value) {
                             if (value!.isEmpty || value.length < 3) {
-                              return "Please enter at least 3 characters";
+                              return Appstrings.nameErrorText;
                             } else {
                               return null;
                             }
                           },
                           decoration:
-                              textFieldDecoration("Enter your First Name"),
+                              textFieldDecoration(Appstrings.firstNameHintText),
                         ),
                         SizedBox(
                           height: height * 0.05,
@@ -86,13 +87,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           controller: homeProvider.lastNameController,
                           validator: (value) {
                             if (value!.isEmpty || value.length < 3) {
-                              return "Please enter at least 3 characters";
+                              return Appstrings.nameErrorText;
                             } else {
                               return null;
                             }
                           },
                           decoration:
-                              textFieldDecoration("Enter your Last Name"),
+                              textFieldDecoration(Appstrings.lastNameHintText),
                         ),
                         SizedBox(
                           height: height * 0.05,
@@ -126,14 +127,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             : makeItEditable,
                         child: homeProvider.isLoading
                             ? const Text(
-                                "Done",
+                                Appstrings.doneText,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700),
                               )
                             : const Text(
-                                "Edit",
+                                Appstrings.editText,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
@@ -155,10 +156,10 @@ class _HomeScreenState extends State<HomeScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Do you want to logout?'),
+          title: const Text(Appstrings.logoutChoiceText),
           actions: [
             TextButton(
-              child: const Text('Yes'),
+              child: const Text(Appstrings.yesText),
               onPressed: () {
                 Navigator.of(context).pop();
                 final provider =
@@ -167,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             TextButton(
-              child: const Text('No'),
+              child: const Text(Appstrings.noText),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],

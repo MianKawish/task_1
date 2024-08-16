@@ -2,10 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_1/firebase_options.dart';
-import 'package:task_1/provider/homeProvider.dart';
-import 'package:task_1/provider/loginProvider.dart';
-import 'package:task_1/provider/signupProvider.dart';
-import 'package:task_1/screens/splashScreen.dart';
+import 'package:task_1/view_model/controller/home/homeProvider.dart';
+import 'package:task_1/view_model/controller/login/loginProvider.dart';
+import 'package:task_1/view_model/controller/signup/signupProvider.dart';
+import 'package:task_1/view/splashView/splashScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

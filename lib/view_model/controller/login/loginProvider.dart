@@ -1,26 +1,30 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:task_1/screens/homeScreen.dart';
+import 'package:task_1/services/auth/authentication_services.dart';
+import 'package:task_1/utils/utils.dart';
+import 'package:task_1/view/homeView/homeScreen.dart';
 
 class LoginProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void loginUser(String email, String password, BuildContext ctx) async {
     _isLoading = true;
+    notifyListeners();
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await AuthenticationServices.auth
+          .signInWithEmailAndPassword(email: email, password: password);
       _isLoading = false;
+      emailController.clear();
+      passwordController.clear();
       Navigator.pushReplacement(
           ctx,
           MaterialPageRoute(
             builder: (context) => const HomeScreen(),
           ));
     } catch (e) {
-      print(e.toString());
+      Utils.flutterToast(e.toString());
       _isLoading = false;
     }
 
